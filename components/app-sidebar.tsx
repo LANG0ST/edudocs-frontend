@@ -20,6 +20,8 @@ import {
   HomeIcon,
   ClipboardListIcon,
   UsersIcon,
+  HistoryIcon,
+  CloudUploadIcon,
 } from "lucide-react"
 
 export function AppSidebar({ activeRoute }: { activeRoute?: string }) {
@@ -67,17 +69,29 @@ export function AppSidebar({ activeRoute }: { activeRoute?: string }) {
 
     if (userRole === "SCOLARITE") {
       return [
-        ...baseItems,
+        {
+          title: "Tableau de bord",
+          url: "/scolarite",
+          icon: <HomeIcon className="h-4 w-4" />,
+          isActive: currentRoute === "/scolarite",
+        },
         {
           title: "Demandes",
           url: "/demandes",
           icon: <ClipboardListIcon className="h-4 w-4" />,
           isActive: currentRoute.startsWith("/demandes"),
-          items: [
-            { title: "À traiter", url: "/demandes?status=EN_ATTENTE" },
-            { title: "Approuvées", url: "/demandes?status=TERMINE" },
-            { title: "Rejetées", url: "/demandes?status=REJETE" },
-          ],
+        },
+        {
+          title: "Historique",
+          url: "/upload-history",
+          icon: <HistoryIcon className="h-4 w-4" />,
+          isActive: currentRoute.startsWith("/upload-history"),
+        },
+        {
+          title: "Upload PDF",
+          url: "/upload",
+          icon: <CloudUploadIcon className="h-4 w-4" />,
+          isActive: currentRoute === "/upload",
         },
       ]
     }
@@ -144,7 +158,7 @@ export function AppSidebar({ activeRoute }: { activeRoute?: string }) {
       className="sidebar-glass border-none hidden md:block"
       collapsible="offcanvas"
       variant="floating"
-      
+
     >
 
       <SidebarHeader className="bg-transparent px-4 pt-6 pb-4">

@@ -12,8 +12,9 @@ import { authClient } from "@/lib/auth-client"
 
 export function LoginForm({
   className,
+  hideHeader = false,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { hideHeader?: boolean }) {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleGoogleSignIn = async () => {
@@ -21,7 +22,7 @@ export function LoginForm({
       setIsLoading(true)
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: `${window.location.origin}/dashboard`,
+        callbackURL: `${window.location.origin}/post-login`,
       })
     } catch (error) {
       console.error("Google sign-in error:", error)
@@ -32,44 +33,60 @@ export function LoginForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold text-[#1B2B4B]">EduDocs</h1>
-          <FieldDescription>
-            Plateforme de certification des documents universitaires
-          </FieldDescription>
-        </div>
+
+        {!hideHeader && (
+          <div className="flex flex-col items-center gap-2 text-center">
+            <h1 className="text-2xl font-bold text-[#1B2B4B]">EduDocs</h1>
+            <FieldDescription>
+              Plateforme de certification des documents universitaires
+            </FieldDescription>
+          </div>
+        )}
 
         <Field>
           <Button
+            aria-label="login-google"
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full bg-[#132447] hover:bg-[#1B2B4B]"
+            className="h-16 w-full rounded-2xl bg-[#132447] hover:bg-[#1B2B4B] text-lg font-semibold flex items-center justify-center gap-4 relative"
           >
             {isLoading ? (
               "Connexion en cours..."
             ) : (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="mr-2 h-4 w-4"
-                >
-                  <path
-                    d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Continuer avec Google
+                <div className="absolute left-3 flex h-12 w-12 items-center justify-center rounded-full bg-white">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 48 48"
+                    className="h-12 w-12 scale-150"
+                  >
+                    <path
+                      fill="#FFC107"
+                      d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12S17.4 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"
+                    />
+                    <path
+                      fill="#FF3D00"
+                      d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+                    />
+                    <path
+                      fill="#4CAF50"
+                      d="M24 44c5.2 0 10-2 13.5-5.3l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.5 16.2 44 24 44z"
+                    />
+                    <path
+                      fill="#1976D2"
+                      d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.1-4 5.5-7.5 6.5l6.2 5.2C39.6 36.1 44 30.6 44 24c0-1.3-.1-2.3-.4-3.5z"
+                    />
+                  </svg>
+                </div>
+
+                <span>Continuer avec Google</span>
               </>
             )}
           </Button>
         </Field>
       </FieldGroup>
 
-      <FieldDescription className="px-6 text-center text-xs">
-        Vous devez utiliser votre adresse email @uca.ac.ma pour vous connecter.
-      </FieldDescription>
     </div>
   )
 }

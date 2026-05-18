@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import { api } from '@/lib/api'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface Demande {
   id: string
   typeDocument: string
@@ -21,7 +20,6 @@ interface Demande {
   motif: string
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const typeDocumentLabel: Record<string, string> = {
   RELEVE_DE_NOTES: 'Relevé de notes',
   CERTIFICAT_SCOLARITE: 'Certificat de scolarité',
@@ -48,12 +46,10 @@ const statutOptions = [
 
 const PAGE_SIZE = 7
 
-// ─── Short ID formatter ───────────────────────────────────────────────────────
 function shortId(id: string) {
-  return `#REQ-${id.slice(0, 8).toUpperCase()}`
+  return `#${id.slice(0, 8).toUpperCase()}`
 }
 
-// ─── Status badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ statut }: { statut: string }) {
   const cfg = statutConfig[statut] ?? { label: statut, color: '#6b7280', bg: 'rgba(107,114,128,0.1)' }
   return (
@@ -69,7 +65,6 @@ function StatusBadge({ statut }: { statut: string }) {
   )
 }
 
-// ─── Dropdown filter ──────────────────────────────────────────────────────────
 function FilterSelect({
   value, options, onChange,
 }: {
@@ -126,7 +121,6 @@ function FilterSelect({
   )
 }
 
-// ─── Skeleton row ─────────────────────────────────────────────────────────────
 function SkeletonRow() {
   return (
     <tr>
@@ -139,7 +133,6 @@ function SkeletonRow() {
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function MesDemandesPage() {
   const session = useSession()
   const router = useRouter()
@@ -163,7 +156,6 @@ export default function MesDemandesPage() {
     if (session?.data?.user) fetch()
   }, [session])
 
-  // Reset to page 1 on filter/search change
   useEffect(() => { setPage(1) }, [filter, search])
 
   const filtered = useMemo(() => {
@@ -184,15 +176,11 @@ export default function MesDemandesPage() {
 
   return (
     <div className="px-6 py-8 md:px-8 md:py-10">
-      {/* ── Header ── */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="mt-1 text-[28px] font-bold leading-tight" style={{ color: 'var(--color-navy)' }}>
             Historique des Demandes
           </h1>
-          <p className="mt-1 text-[14px]" style={{ color: 'rgba(3,23,61,0.52)' }}>
-            Suivez l'état d'avancement de vos demandes administratives en temps réel.
-          </p>
         </div>
 
         <motion.button
@@ -207,17 +195,12 @@ export default function MesDemandesPage() {
         </motion.button>
       </div>
 
-      {/* ── Filters ── */}
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div>
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'rgba(3,23,61,0.4)' }}>
-            Statut
-          </p>
           <FilterSelect value={filter} options={statutOptions} onChange={setFilter} />
         </div>
 
-        {/* Search */}
-        <div className="flex-1 sm:mt-5">
+        <div className="mb-5 flex-1 sm:mt-5">
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 opacity-35"
               style={{ color: 'var(--color-navy)' }} />
@@ -236,7 +219,6 @@ export default function MesDemandesPage() {
         </div>
       </div>
 
-      {/* ── Table ── */}
       <div className="overflow-hidden rounded-xl border bg-white"
         style={{ borderColor: 'rgba(3,23,61,0.1)' }}>
         <table className="w-full">
@@ -276,14 +258,12 @@ export default function MesDemandesPage() {
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(3,23,61,0.02)')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  {/* ID */}
                   <td className="px-5 py-4">
                     <span className="text-[13px] font-semibold" style={{ color: 'var(--color-orange)' }}>
                       {shortId(d.id)}
                     </span>
                   </td>
 
-                  {/* Type */}
                   <td className="px-5 py-4">
                     <span className="text-[14px] font-medium" style={{ color: 'var(--color-navy)' }}>
                       {typeDocumentLabel[d.typeDocument] ?? d.typeDocument}
@@ -293,19 +273,16 @@ export default function MesDemandesPage() {
                     </p>
                   </td>
 
-                  {/* Date */}
                   <td className="px-5 py-4">
                     <span className="text-[13px]" style={{ color: 'rgba(3,23,61,0.6)' }}>
                       {format(new Date(d.createdAt), 'd MMM yyyy, HH:mm', { locale: fr })}
                     </span>
                   </td>
 
-                  {/* Status */}
                   <td className="px-5 py-4">
                     <StatusBadge statut={d.statut} />
                   </td>
 
-                  {/* Actions */}
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-2">
                       {d.statut === 'REJETE' && (
@@ -321,7 +298,6 @@ export default function MesDemandesPage() {
                         </motion.button>
                       )}
 
-                      {/* View */}
                       <motion.button
                         type="button" title="Voir"
                         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
@@ -333,7 +309,6 @@ export default function MesDemandesPage() {
                         <Eye className="h-4 w-4" />
                       </motion.button>
 
-                      {/* Download — only when TERMINE */}
                       <motion.button
                         type="button" title="Télécharger"
                         disabled={d.statut !== 'TERMINE'}

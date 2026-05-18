@@ -76,7 +76,6 @@ function DocTypeCard({ id, label, description, icon: Icon, selected, onSelect }:
       style={{ borderColor: selected ? 'var(--color-orange)' : 'rgba(3,23,61,0.1)' }}
     >
       <div className="flex items-start justify-between">
-        {/* Icon square — orange bg, white icon */}
         <div className="flex h-12 w-12 items-center justify-center rounded-lg"
           style={{ backgroundColor: 'var(--color-orange)' }}>
           <Icon className="h-6 w-6" style={{ color: '#fff' }} />
@@ -114,12 +113,12 @@ export default function NouvelleDemandeStep1Page() {
   const [selected, setSelected] = useState<string | null>(null)
 
   return (
-    <div className="flex h-screen items-start justify-center p-4 sm:items-center sm:p-6 lg:p-8">
+    <div className="flex min-h-[100dvh] items-start justify-center p-4 pb-24 sm:items-center ">
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.38, ease: 'easeOut' }}
-        className="bg-transparent w-full max-w-[1200px] rounded-2xl p-5 sm:p-8 lg:p-10"
+        className="bg-transparent w-full max-w-[1200px] rounded-2xl px-5 sm:px-8 lg:px-10"
       >
         <div className="mb-4 flex justify-center sm:mb-5">
           <div className="relative h-14 w-14 overflow-hidden  sm:h-16 sm:w-16">

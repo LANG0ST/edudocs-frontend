@@ -8,6 +8,18 @@ export interface DemandeSummary {
     statut: DemandeStatut
     createdAt: string
     motif: string
+    etudiant?: {
+        id: string
+        name: string
+        cne?: string | null
+        filiere?: string | null
+        classe?: string | null
+        etablissement?: string | null
+    } | null
+    document?: {
+        id: string
+        cheminFichier?: string | null
+    } | null
 }
 
 export interface DocumentSummary {
@@ -33,6 +45,14 @@ export interface DocumentPreview {
     statutBlockchain: string
     txHash?: string | null
     downloadUrl: string
+    etudiant?: {
+        id: string
+        name: string
+        cne?: string | null
+        filiere?: string | null
+        classe?: string | null
+        etablissement?: string | null
+    } | null
 }
 
 export interface CreateDemandePayload {
@@ -75,7 +95,6 @@ async function readErrorMessage(response: Response) {
             return text
         }
     } catch {
-        // Fall through to status message.
     }
 
     return `Requête échouée (${response.status})`
@@ -108,6 +127,10 @@ export const api = {
         apiRequest<SessionResponse>("/api/auth/session", { headers }),
     getMesDemandes: () =>
         apiRequest<DemandeSummary[]>("/demandes/mes-demandes"),
+    getAllDemandes: (limit?: number) =>
+        apiRequest<DemandeSummary[]>(limit ? `/demandes?limit=${encodeURIComponent(limit)}` : '/demandes'),
+    getStudents: (query: string) =>
+        apiRequest<{ id: string; name: string; cne?: string }[]>(`/students?query=${encodeURIComponent(query)}`),
     getMonPortfolio: () =>
         apiRequest<DocumentSummary[]>("/documents/mon-portfolio"),
     getDocumentPreview: (id: string) =>

@@ -12,6 +12,7 @@ type LayoutProps = {
 };
 
 export default function EtudiantLayout({ children }: LayoutProps) {
+    
     const router = useRouter();
     const session = useSession();
 
@@ -25,17 +26,15 @@ export default function EtudiantLayout({ children }: LayoutProps) {
         }
     }, [router, session]);
 
-    if (session?.data?.user === undefined) {
-        return null;
-    }
-
     return (
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="bg-transparent text-[#1B2B4B] h-screen p-4 pb-24 sm:p-6 lg:p-6">
-                {children}
-            </SidebarInset>
+        <>
+            <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset className="bg-transparent text-[#1B2B4B] min-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 pb-24 sm:p-6 lg:p-6 md:pb-0">
+                    {children}
+                </SidebarInset>
+            </SidebarProvider>
             <StudentMobileNav />
-        </SidebarProvider>
+        </>
     );
 }

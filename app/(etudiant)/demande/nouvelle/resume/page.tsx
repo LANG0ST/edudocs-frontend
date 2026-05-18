@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -136,7 +136,7 @@ function StyledSelect({ label, placeholder, value, options, onChange }: {
   )
 }
 
-export default function ResumeStep2Page() {
+function ResumeStep2Content() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [type, setType] = useState<string | null>(null)
@@ -177,7 +177,7 @@ export default function ResumeStep2Page() {
     (!needsSemester || formData.semestre)
 
   return (
-    <div className="flex h-screen items-start justify-center p-4 sm:items-center sm:p-6 lg:p-8">
+    <div className="flex  items-start justify-center p-4 pb-24 sm:items-center sm:p-6 lg:p-8">
       <motion.div
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.38, ease: 'easeOut' }}
@@ -259,5 +259,13 @@ export default function ResumeStep2Page() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function ResumeStep2Page() {
+  return (
+    <Suspense fallback={null}>
+      <ResumeStep2Content />
+    </Suspense>
   )
 }

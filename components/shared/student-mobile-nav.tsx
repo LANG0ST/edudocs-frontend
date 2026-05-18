@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { HomeIcon, FilePlus2Icon, FolderOpenIcon, ClipboardListIcon } from "lucide-react"
@@ -22,8 +24,17 @@ function MobileNavLink({ href, active, label, children }: { href: string; active
 
 export function StudentMobileNav() {
   const pathname = usePathname()
+  const [mounted, setMounted] = useState(false)
 
-  return (
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
+  return createPortal(
     <nav className="fixed right-0 bottom-0 left-0 z-30 border-t border-[rgba(3,23,61,0.08)] bg-white/90 px-3 py-2 backdrop-blur-md md:hidden">
       <div className="grid grid-cols-4 gap-2">
         <MobileNavLink href="/dashboard" active={pathname === "/dashboard"} label="Tableau de bord">
@@ -39,6 +50,7 @@ export function StudentMobileNav() {
           <ClipboardListIcon className="h-5 w-5" />
         </MobileNavLink>
       </div>
-    </nav>
+    </nav>,
+    document.body,
   )
 }

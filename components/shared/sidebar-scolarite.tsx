@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 const links = [
-    { href: '/dashboard', label: 'Tableau de bord' },
+    { href: '/scolarite', label: 'Tableau de bord' },
     { href: '/demandes', label: 'Demandes actives' },
-    { href: '/historique', label: 'Historique' },
+    { href: '/upload-history', label: 'Historique' },
     { href: '/upload', label: 'Upload PDF' },
 ];
 

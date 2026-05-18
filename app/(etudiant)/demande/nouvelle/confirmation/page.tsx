@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -78,7 +78,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-export default function ConfirmationStep3Page() {
+function ConfirmationStep3Content() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [accepted, setAccepted] = useState(false)
@@ -126,7 +126,7 @@ export default function ConfirmationStep3Page() {
   const TypeIcon = typeIcons[type] ?? FileText
 
   return (
-    <div className="flex h-screen items-start justify-center p-4 sm:items-center sm:p-6 lg:p-8">
+    <div className="flex items-start justify-center p-4 pb-24 sm:items-center sm:p-6 lg:p-8">
       <motion.div
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.38, ease: 'easeOut' }}
@@ -266,5 +266,13 @@ export default function ConfirmationStep3Page() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function ConfirmationStep3Page() {
+  return (
+    <Suspense fallback={null}>
+      <ConfirmationStep3Content />
+    </Suspense>
   )
 }

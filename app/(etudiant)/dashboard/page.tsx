@@ -51,9 +51,7 @@ export default function Page() {
             status: "ready" as const,
         }))
 
-        if (readyDocs.length >= 3) {
-            return readyDocs
-        }
+        if (readyDocs.length >= 3) return readyDocs
 
         const processingDocs = demandes
             .filter((demande) => demande.statut !== "TERMINE")
@@ -69,55 +67,63 @@ export default function Page() {
     }, [documents, demandes])
 
     const user = session?.data?.user
+    const userName = user?.name || "Etudiant"
+    const userCne =
+        typeof (user as { cne?: unknown } | undefined)?.cne === "string"
+            ? (user as { cne?: string }).cne
+            : null
 
     return (
-        <div className="dashboard-canvas flex h-screen w-full overflow-hidden pb-20 md:pb-0">
-            <main className="flex-1 overflow-y-auto px-4 py-6 md:py-8">
-                <section>
-                    <p className="text-[20px] font-medium uppercase tracking-wide muted-text">Bon Retour,</p>
-                    <h1 className="text-[36px] font-bold leading-tight text-orange">{user?.name || "Etudiant"}</h1>
+        <main className="px-4 py-6 md:px-8 md:py-8">
 
-                    <div className="mt-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
-                        <KpiCard
-                            title="Attestation de réussite"
-                            bgColor="var(--color-card-orange)"
-                            imageSrc="/images/KPI/reussite.png"
-                            onClick={() => router.push("/demande/nouvelle/resume?type=ATTESTATION_REUSSITE")}
-                        />
-                        <KpiCard
-                            title="Attestation d'inscription"
-                            bgColor="var(--color-card-blue)"
-                            imageSrc="/images/KPI/inscription.png"
-                            onClick={() => router.push("/demande/nouvelle/resume?type=ATTESTATION_INSCRIPTION")}
-                        />
-                        <KpiCard
-                            title="Relevé de notes"
-                            bgColor="var(--color-card-peach)"
-                            imageSrc="/images/KPI/notes.png"
-                            onClick={() => router.push("/demande/nouvelle/resume?type=RELEVE_DE_NOTES")}
-                        />
-                        <KpiCard
-                            title="Faire une demande"
-                            bgColor="transparent"
-                            variant="ghost"
-                            imageSrc=""
-                            onClick={() => router.push("/demande/nouvelle")}
-                        />
-                    </div>
-                </section>
+            <section>
+                <p className="text-[20px] font-medium uppercase tracking-wide muted-text">
+                    Bon Retour,
+                </p>
+                <h1 className="text-[36px] font-bold leading-tight text-orange">
+                    {userName}
+                </h1>
 
-                <section className="mt-8 grid gap-6 md:grid-cols-5">
-                    <div className="md:col-span-5 my-5">
-                        <h2 className="text-[24px] font-bold">Vos Documents Récents</h2>
-                    </div>
-                    <div className="md:col-span-3">
-                        <RecentDocuments documents={recentDocuments} />
-                    </div>
-                    <div className="md:col-span-2">
-                        <StudentCard />
-                    </div>
-                </section>
-            </main>
-        </div>
+                <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    <KpiCard
+                        title="Attestation de réussite"
+                        bgColor="var(--color-card-orange)"
+                        imageSrc="/images/KPI/reussite.png"
+                        onClick={() => router.push("/demande/nouvelle/resume?type=ATTESTATION_REUSSITE")}
+                    />
+                    <KpiCard
+                        title="Attestation d'inscription"
+                        bgColor="var(--color-card-blue)"
+                        imageSrc="/images/KPI/inscription.png"
+                        onClick={() => router.push("/demande/nouvelle/resume?type=ATTESTATION_INSCRIPTION")}
+                    />
+                    <KpiCard
+                        title="Relevé de notes"
+                        bgColor="var(--color-card-peach)"
+                        imageSrc="/images/KPI/notes.png"
+                        onClick={() => router.push("/demande/nouvelle/resume?type=RELEVE_DE_NOTES")}
+                    />
+                    <KpiCard
+                        title="Faire une demande"
+                        bgColor="transparent"
+                        variant="ghost"
+                        imageSrc=""
+                        onClick={() => router.push("/demande/nouvelle")}
+                    />
+                </div>
+            </section>
+
+            <section className="mt-8">
+                <h2 className="mb-5 text-[24px] font-bold" style={{ color: 'var(--color-navy)' }}>
+                    Vos Documents Récents
+                </h2>
+
+                <div className="grid gap-6 min-[1200px]:grid-cols-[1fr_480px]">
+                    <RecentDocuments documents={recentDocuments} />
+                    <StudentCard name={userName} cne={userCne} />
+                </div>
+            </section>
+
+        </main>
     )
 }

@@ -218,4 +218,27 @@
   .divider-soft {
     border-color: var(--color-divider);
   }
+
+
+  @keyframes floatTilt {
+  0% {
+    transform: translate(-12%, 14%) rotate(-6deg);
+  }
+
+  25% {
+    transform: translate(-11%, 13%) rotate(-2deg);
+  }
+
+  50% {
+    transform: translate(-12%, 14%) rotate(4deg);
+  }
+
+  75% {
+    transform: translate(-13%, 15%) rotate(-2deg);
+  }
+
+  100% {
+    transform: translate(-12%, 14%) rotate(-6deg);
+  }
+}
 }
